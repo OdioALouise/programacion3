@@ -1,0 +1,52 @@
+Procedimiento propagacion_BFS(G grafo)
+	var v: vértice
+Comienzo
+
+a = DevolverPrimerActivo(v) /* Devuelve el vértice
+activo del comienzo */
+BFS(a)
+
+Fin
+
+
+Procedimiento BFS ( v: Vertice )
+	Var q: ColaDeVertices
+	 u,w: Vértice
+
+Comienzo
+	CrearCola(q)
+	Marcar(v)
+	InsBack(q,v)
+
+	Mientras No-Vacia(q)
+		u = Primero(q)
+		
+		q=resto(q)
+
+		Para cada w adyacente a u
+			Si w no marcado
+				Marcar(w)
+				Si no-esInmune(w)
+					InsBack(q, w)
+					Si esActivo(u) y esSano(w)
+						Infectar(w,”Latente”)
+					Sino si esLatente(u) y esSano(w)
+						Infectar(w,”Activo”)
+					Fin si
+
+			Fin si
+		Fin para
+	Fin Mientras
+Fin
+
+
+En el caso de que los que comiencen a propagar la enfermedad sean todos activos, entonces no importaría cual sería el que comience a infectar, siempre se terminaría con una misma configuración de infectados activos y latentes.
+Como se muestra el diagrama el patrón de infección que se sigue, si empieza uno u otros de los primeros infectados termina contagiando de la misma a cada vecino durante los días de propagación.
+
+En el caso de los que comiencen a propagar la enfermedad sean activos y latentes, entonces sí importaría el orden en el que estos comiencen a propagar la enfermedad, como se describe en la figura.
+
+
+
+
+
+
