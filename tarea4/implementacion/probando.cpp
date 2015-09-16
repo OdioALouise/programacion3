@@ -1,17 +1,57 @@
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>
 #include "tipoT.h"
 #include "Cola.h"
 #include "ListaOrd.h"
 #include "Pila.h"
+#include "Deposito.h"
 
 void imprimir (Cola &c);
 void imprimirLista (ListaOrd &l);
 void imprimirPila (Pila &p);
+void imprimirDeposito (Deposito &l);
+
+
 
 int main(){
 
+	ListaOrd l;
+	
+	Deposito d;
+	d=crearDeposito(7);
+
+	agregarReferencia(d, 3, 2);
+	agregarReferencia(d, 3, 5);
+	agregarReferencia(d, 3, 1);
+
+
+	agregarReferencia(d, 2, 5);
+
+	//l=referencias (d, 3);
+	//imprimirLista(l);
+
+	//l=referencias (d, 2);
+	//imprimirLista(l);
+
+	//printf("Elemento en posicion 2: %d \n", elemento (d, 2) );
+	//printf("Elemento en posicion 3: %d \n", elemento (d, 3) );
+
+	//printf("Cantidad de articulos %d \n", cantidadArticulos(d));
+	//imprimirDeposito(d);
+
+	Pila p;
+	p=dfsPostOrden(d);
+	imprimirPila(p);
+	
+
+
+	return 0;
+}
+
+
+/*
 	Pila c;
 	crearPila(10, c);
 
@@ -35,10 +75,7 @@ int main(){
 	destruirPila(c);
 
 
-
-
-	return 0;
-}
+*/
 
 
 	/*ListaOrd c;

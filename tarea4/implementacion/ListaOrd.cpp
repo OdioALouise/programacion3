@@ -27,6 +27,8 @@ void crearLista (ListaOrd &l)
     En otro caso no hace nada. */
 void insLista (tipoT t, ListaOrd &l)
 {
+
+
 	bool entra;
 	entra = true;
 	
@@ -35,6 +37,7 @@ void insLista (tipoT t, ListaOrd &l)
 	aux = new nodox;
 	aux->dato = t;
 	aux->sig = NULL;
+
 
 	if (!esVaciaLista (l)) 
 		{
@@ -129,7 +132,7 @@ void imprimirLista (ListaOrd &l)
 	actual=l->primero;
 	while (actual != NULL) 
 	{
-		printf("El valor en la posicion %d \t es %d \n", contador, actual->dato);
+		printf("\t El valor en la posicion %d \t es %d \n", contador, actual->dato);
 		contador++;
 		actual=actual->sig;
 	}
