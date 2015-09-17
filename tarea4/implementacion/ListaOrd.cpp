@@ -12,6 +12,7 @@ struct nodox
 struct AuxListaOrd
 	{
 		nodox* primero;
+		nodox* actual;
 		nodox* ultimo;
 	};
 
@@ -20,6 +21,7 @@ void crearLista (ListaOrd &l)
 {
 	l = new AuxListaOrd;
 	l->primero = NULL;
+	l->actual = NULL;
 	l->ultimo = NULL;
 }
 
@@ -47,6 +49,7 @@ void insLista (tipoT t, ListaOrd &l)
 				entra = false;
 				aux->sig = l->primero;
 				l->primero = aux;
+				l->actual = l->primero;
 			}
 
 			if (esMayor (t, l->ultimo->dato))
@@ -73,6 +76,7 @@ void insLista (tipoT t, ListaOrd &l)
 		{
 			l->primero = aux;
 			l->ultimo = aux;
+			l->actual = aux;
 		}
 }
 
@@ -115,6 +119,7 @@ void destruirLista (ListaOrd &l)
 			else 
 			{
 				l->primero = NULL;
+				l->actual = NULL;
 				l->ultimo = NULL;
 			}
 			delete ElTermineitor;
@@ -137,5 +142,12 @@ void imprimirLista (ListaOrd &l)
 		actual=actual->sig;
 	}
 }
+
+
+void irActual (ListaOrd & l)
+{
+	l->primero = l->actual;
+}
+
 
 

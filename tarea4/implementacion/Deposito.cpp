@@ -2,10 +2,13 @@
 #include <stdio.h>
 #include "Deposito.h"
 #include "ListaOrd.h"
+#include "Cola.h"
+
 
 void imprimirLista (ListaOrd &l);
 void imprimirPila (Pila &p);
-
+void imprimirDeposito (Deposito &l);
+void irActual (ListaOrd & l);
 struct nodo{
 	ListaOrd l;
 	tipoT valor;
@@ -123,7 +126,7 @@ void dfs(tipoT valor, Deposito d, Pila &p){
 		}
 		restoLista(l);
 	}
-
+	irActual (l);
 	apilar(valor, p);
 
 }
@@ -155,7 +158,146 @@ Pila dfsPostOrden (Deposito d){
 }
 
 
+/*  Devuelve un depósito igual a 'd' pero con las referencias
+    en sentido inverso. */
+Deposito transpuesto (Deposito d)
+{
 
+	Deposito transpuesto;
+	transpuesto=crearDeposito (d->cantidad_articulos);
+
+	nodo* actual;
+	actual=d->tabla;
+	
+	//imprimirDeposito(d);
+
+	while(actual!=NULL)
+	{
+		ListaOrd l;
+		l=actual->l;
+		imprimirLista(l);
+		if(!esVaciaLista(l))
+		{
+
+			while(!esVaciaLista(l)){
+				//printf("a1 %d \t a2 %d \n", primeroLista(l), actual->valor);
+				agregarReferencia (transpuesto, primeroLista(l), actual->valor);
+				restoLista(l);
+			}
+		}
+		irActual (l);
+		actual=actual->siguiente;
+	}
+
+	return transpuesto;
+}
+
+
+
+void bfs(Deposito d, tipoT valor){
+	Cola c;
+	tipoT u;
+	crearCola(c);
+	encolar (valor, c);
+
+
+	d->marcas[valor]=1;
+
+
+
+
+	int contador=1;
+
+	while(!esVaciaCola (c)){
+		u=frente(c);
+		desencolar (c);
+
+		nodo * actual;
+		actual=d->tabla;
+
+		for(int i=1; i<u; i++){
+			actual=actual->siguiente;
+		}
+		ListaOrd l;
+		l=actual->l;
+		//printf("PASADA NUMERO: %d \n", contador);
+		//imprimirLista(l);
+		
+		while(!esVaciaLista(l)){
+				if( d->marcas[primeroLista(l)] == 0 ){
+					d->marcas[primeroLista(l)]=1;
+					encolar (primeroLista(l), c);
+				}
+			restoLista(l);
+			}
+		irActual (l);
+		contador++;
+		}
+}
+
+
+/*  Precondiciones:
+        1. El tamaño de 'agrupamientos' es igual a la cantidad de artículos de
+           'd'.
+        2. 'agrupamientos [hash (a)] == id'.
+
+    El valor de 'agrupamientos [i]' es: el identificador del agrupamiento
+    al que se ha asignado el artículo 'x' que cumple 'hash (x) == i', o
+    USHRT_MAX si 'x' todavía no ha sido asignado a ningún agrupamiento.
+
+    Modifica 'agrupamientos' asignando 'id' a los artículos que cumplen todas
+    las siguientes condiciones:
+        a) todavía no se les ha asignado agrupamiento;
+        b) son accesibles desde 'a';
+        c) el acceso desde 'a' debe poder hacerse sin seguir referencias a
+           través de artículos a los que ya se había asignado agrupamiento antes
+           de la invocación. */
+void nuevosAccesibles (Deposito d, tipoT a, unsigned int id,
+                       unsigned int * &agrupamientos){
+
+
+
+
+	for(int i=0; i<d->cantidad_articulos;i++){
+		d->marcas[i]=0;
+	}
+
+
+	bfs(d, a);
+
+
+
+	for(int i=1; i<=d->cantidad_articulos;i++){
+		if(d->marcas[i]==1){
+			agrupamientos[i]=id;
+		}
+	}
+
+	for(int i=1; i<=d->cantidad_articulos;i++){
+			printf("Valor en la posicion %d \t %d \n", i, agrupamientos[i]);
+	}
+
+
+
+}
+
+
+void destruirDeposito (Deposito &d){
+
+	nodo * actual;
+	actual=d->tabla;
+	while (actual != NULL) 
+	{
+		nodo * aux;
+		destruirLista(actual->l);
+		aux=actual;
+		actual=actual->siguiente;
+		delete aux;
+	}
+
+	delete d;
+
+}
 
 void imprimirDeposito (Deposito &l)
 {

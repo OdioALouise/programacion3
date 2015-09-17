@@ -31,7 +31,7 @@ int main(){
 
 	//l=referencias (d, 3);
 	//imprimirLista(l);
-
+	//imprimirLista(l);
 	//l=referencias (d, 2);
 	//imprimirLista(l);
 
@@ -39,13 +39,57 @@ int main(){
 	//printf("Elemento en posicion 3: %d \n", elemento (d, 3) );
 
 	//printf("Cantidad de articulos %d \n", cantidadArticulos(d));
-	//imprimirDeposito(d);
 
-	Pila p;
+
+        unsigned int * agrupamientos =new unsigned int [7];
+
+	for(unsigned int i = 0; i<7; i++)
+		agrupamientos[i]=0;
+
+	nuevosAccesibles (d, 3, 12 ,agrupamientos);
+
+	printf("BOLSO CAGON \n");
+
+	for(unsigned int i = 0; i<7; i++)
+		agrupamientos[i]=0;
+
+	nuevosAccesibles (d, 4, 12 ,agrupamientos);
+
+
+	printf("BOLSO CAGON \n");
+
+	for(unsigned int i = 0; i<7; i++)
+		agrupamientos[i]=0;
+
+	nuevosAccesibles (d, 6, 12 ,agrupamientos);
+
+
+	printf("BOLSO CAGON \n");
+
+	for(unsigned int i = 0; i<7; i++)
+		agrupamientos[i]=0;
+
+	nuevosAccesibles (d, 7, 12 ,agrupamientos);
+
+
+	/*Pila p;	
 	p=dfsPostOrden(d);
+
+	printf("IMPRIMIR PILAS \n\n\n");
+
 	imprimirPila(p);
 	
+	Deposito t;
 
+	t=transpuesto (d);
+	printf("VA MANYAR MIERDA \n\n\n");
+	imprimirDeposito(t);
+
+	printf("AGORA EL OTRO CARA \n\n\n");
+	imprimirDeposito(d);
+	*/
+
+	destruirDeposito (d);
 
 	return 0;
 }
