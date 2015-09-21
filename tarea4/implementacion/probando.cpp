@@ -20,14 +20,24 @@ int main(){
 	ListaOrd l;
 	
 	Deposito d;
-	d=crearDeposito(7);
+	d=crearDeposito(5);
 
-	agregarReferencia(d, 3, 2);
+	agregarReferencia(d, 1, 2);
+	agregarReferencia(d, 1, 5);
+
+	agregarReferencia(d, 2, 1);
+
+
 	agregarReferencia(d, 3, 5);
-	agregarReferencia(d, 3, 1);
+	agregarReferencia(d, 3, 4);
+
+	agregarReferencia(d, 4, 3);
+
+	agregarReferencia(d, 4, 2);
+	agregarReferencia(d, 5, 2);
 
 
-	agregarReferencia(d, 2, 5);
+
 
 	//l=referencias (d, 3);
 	//imprimirLista(l);
@@ -41,16 +51,25 @@ int main(){
 	//printf("Cantidad de articulos %d \n", cantidadArticulos(d));
 
 
-        unsigned int * agrupamientos =new unsigned int [7];
+        unsigned int * agrupamientos =new unsigned int [5];
 
-	for(unsigned int i = 0; i<7; i++)
+	for(unsigned int i = 0; i<5; i++)
 		agrupamientos[i]=0;
 
-	nuevosAccesibles (d, 3, 12 ,agrupamientos);
+	nuevosAccesibles (d, 1, 12 ,agrupamientos);
+
 
 	printf("BOLSO CAGON \n");
 
-	for(unsigned int i = 0; i<7; i++)
+	/*for(unsigned int i = 0; i<5; i++)
+		agrupamientos[i]=0;*/
+
+
+	nuevosAccesibles (d, 3, 7 ,agrupamientos);
+
+	printf("BOLSO CAGON \n");
+
+	/*for(unsigned int i = 0; i<7; i++)
 		agrupamientos[i]=0;
 
 	nuevosAccesibles (d, 4, 12 ,agrupamientos);
@@ -69,7 +88,7 @@ int main(){
 	for(unsigned int i = 0; i<7; i++)
 		agrupamientos[i]=0;
 
-	nuevosAccesibles (d, 7, 12 ,agrupamientos);
+	nuevosAccesibles (d, 7, 12 ,agrupamientos);*/
 
 
 	/*Pila p;	

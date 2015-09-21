@@ -142,15 +142,19 @@ Pila dfsPostOrden (Deposito d){
 
 	int contador=1;
 
+	for(int i=0; i<d->cantidad_articulos;i++){
+		d->marcas[i]=0;
+	}
+
 	while(actual!=NULL){
 
 	//printf("Se marco %d  el valor %d tenia marca %d \n", contador, actual->valor, d->marcas[actual->valor]);
 	
-	if(d->marcas[actual->valor]==0)
-		dfs(actual->valor, d, p);
+		if(d->marcas[actual->valor]==0)
+			dfs(actual->valor, d, p);
 	
-	actual=actual->siguiente;
-	contador++;
+		actual=actual->siguiente;
+		contador++;
 	}
 
 	return p;
@@ -194,7 +198,7 @@ Deposito transpuesto (Deposito d)
 
 
 
-void bfs(Deposito d, tipoT valor){
+void bfs(Deposito d, tipoT valor, unsigned int id, unsigned int * &agrupamientos){
 	Cola c;
 	tipoT u;
 	crearCola(c);
@@ -202,9 +206,7 @@ void bfs(Deposito d, tipoT valor){
 
 
 	d->marcas[valor]=1;
-
-
-
+	agrupamientos[valor]=id;
 
 	int contador=1;
 
@@ -212,21 +214,25 @@ void bfs(Deposito d, tipoT valor){
 		u=frente(c);
 		desencolar (c);
 
+		//Vamos hacia el nodo
 		nodo * actual;
 		actual=d->tabla;
 
 		for(int i=1; i<u; i++){
 			actual=actual->siguiente;
 		}
+
+		//obtenemos su lista de adyacentes
 		ListaOrd l;
 		l=actual->l;
 		//printf("PASADA NUMERO: %d \n", contador);
 		//imprimirLista(l);
 		
 		while(!esVaciaLista(l)){
-				if( d->marcas[primeroLista(l)] == 0 ){
+				if( d->marcas[primeroLista(l)] == 0 && agrupamientos[primeroLista(l)]==0 ){
 					d->marcas[primeroLista(l)]=1;
 					encolar (primeroLista(l), c);
+					agrupamientos[primeroLista(l)]=id;
 				}
 			restoLista(l);
 			}
@@ -263,15 +269,15 @@ void nuevosAccesibles (Deposito d, tipoT a, unsigned int id,
 	}
 
 
-	bfs(d, a);
+	bfs(d, a, id, agrupamientos);
 
 
 
-	for(int i=1; i<=d->cantidad_articulos;i++){
+	/*for(int i=1; i<=d->cantidad_articulos;i++){
 		if(d->marcas[i]==1){
 			agrupamientos[i]=id;
 		}
-	}
+	}*/
 
 	for(int i=1; i<=d->cantidad_articulos;i++){
 			printf("Valor en la posicion %d \t %d \n", i, agrupamientos[i]);
@@ -294,7 +300,7 @@ void destruirDeposito (Deposito &d){
 		actual=actual->siguiente;
 		delete aux;
 	}
-
+	delete d->marcas;
 	delete d;
 
 }
