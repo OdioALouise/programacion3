@@ -28,13 +28,13 @@ Deposito crearDeposito (unsigned int cantidad_articulos){
 	Deposito deposito= new AuxDeposito;
 	deposito->cantidad_articulos=cantidad_articulos;
 	deposito->tabla=new nodo;
-	deposito->marcas=new int[cantidad_articulos + 1];
+	deposito->marcas=new int[cantidad_articulos];
 
 	for(int i=0; i<cantidad_articulos; i++){
 
 		nodo* n=new nodo;
 		crearLista(n->l);
-		n->valor=cantidad_articulos-i;
+		n->valor=cantidad_articulos-i-1;
 		n->siguiente=NULL;
 
 
@@ -68,7 +68,7 @@ void agregarReferencia (Deposito d, tipoT a1, tipoT a2){
 	nodo* actual;
 	actual=d->tabla;
 
-	for(int i=1; i<a1; i++){
+	for(int i=0; i<hash(a1); i++){
 		actual=actual->siguiente;
 	}
 	insLista (a2, actual->l);
@@ -81,7 +81,7 @@ ListaOrd referencias (Deposito d, tipoT a){
 	nodo * actual;
 	actual=d->tabla;
 
-	for(int i=1; i<a; i++){
+	for(int i=0; i<hash(a); i++){
 		actual=actual->siguiente;
 	}	
 
@@ -95,7 +95,7 @@ tipoT elemento (Deposito d, unsigned int pos){
 	nodo * actual;
 	actual=d->tabla;
 
-	for(int i=1; i<pos; i++){
+	for(int i=0; i<pos; i++){
 		actual=actual->siguiente;
 	}	
 
@@ -120,8 +120,8 @@ void dfs(tipoT valor, Deposito d, Pila &p){
 	
 	while(!esVaciaLista(l))
 	{
-		if( d->marcas[primeroLista(l)] == 0){
-			d->marcas[primeroLista(l)]=1;
+		if( d->marcas[hash(primeroLista(l))] == 0){
+			d->marcas[hash(primeroLista(l))]=1;
 			dfs(primeroLista(l), d, p);
 		}
 		restoLista(l);
@@ -149,8 +149,8 @@ Pila dfsPostOrden (Deposito d){
 	while(actual!=NULL){
 
 	//printf("Se marco %d  el valor %d tenia marca %d \n", contador, actual->valor, d->marcas[actual->valor]);
-	
-		if(d->marcas[actual->valor]==0)
+
+		if(d->marcas[hash(actual->valor)]==0)
 			dfs(actual->valor, d, p);
 	
 		actual=actual->siguiente;
@@ -218,7 +218,7 @@ void bfs(Deposito d, tipoT valor, unsigned int id, unsigned int * &agrupamientos
 		nodo * actual;
 		actual=d->tabla;
 
-		for(int i=1; i<u; i++){
+		for(int i=0; i<u; i++){
 			actual=actual->siguiente;
 		}
 
@@ -229,10 +229,10 @@ void bfs(Deposito d, tipoT valor, unsigned int id, unsigned int * &agrupamientos
 		//imprimirLista(l);
 		
 		while(!esVaciaLista(l)){
-				if( d->marcas[primeroLista(l)] == 0 && agrupamientos[primeroLista(l)]==0 ){
-					d->marcas[primeroLista(l)]=1;
+				if( d->marcas[hash(primeroLista(l))] == 0 && agrupamientos[hash(primeroLista(l))]==0 ){
+					d->marcas[hash(primeroLista(l))]=1;
 					encolar (primeroLista(l), c);
-					agrupamientos[primeroLista(l)]=id;
+					agrupamientos[hash(primeroLista(l))]=id;
 				}
 			restoLista(l);
 			}
@@ -264,7 +264,7 @@ void nuevosAccesibles (Deposito d, tipoT a, unsigned int id,
 
 
 
-	for(int i=0; i<=d->cantidad_articulos;i++){
+	for(int i=0; i<d->cantidad_articulos;i++){
 		d->marcas[i]=0;
 	}
 
@@ -279,9 +279,9 @@ void nuevosAccesibles (Deposito d, tipoT a, unsigned int id,
 		}
 	}*/
 
-	for(int i=1; i<=d->cantidad_articulos;i++){
+	/*for(int i=0; i<d->cantidad_articulos;i++){
 			printf("Valor en la posicion %d \t %d \n", i, agrupamientos[i]);
-	}
+	}*/
 
 
 
@@ -307,9 +307,16 @@ void destruirDeposito (Deposito &d){
 
 
 int getMarca(Deposito d, tipoT i){
-	printf("%d \n", d->marcas[i]);
 	return d->marcas[i];
 }
+
+void setMarca(Deposito d, tipoT i, tipoT j){
+	d->marcas[hash(i)]=j;
+}
+
+
+
+
 
 void imprimirDeposito (Deposito &l)
 {

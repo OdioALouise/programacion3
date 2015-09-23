@@ -203,6 +203,10 @@ int main ()
             for (unsigned int i = 0; i < cantidadArticulos (d); i++)
             {
                 scanf (" %d", &agrupamientos [i]);
+                if (i == a)
+                {
+                    assert ( id == agrupamientos [i]);
+                }
             }
 
             nuevosAccesibles (d, a, id, agrupamientos);

@@ -8,6 +8,8 @@
 #include "Pila.h"
 #include "Deposito.h"
 #include "OperacionesDeposito.h"
+#include <limits.h>
+
 
 void imprimir (Cola &c);
 void imprimirLista (ListaOrd &l);
@@ -18,34 +20,76 @@ void imprimirDeposito (Deposito &l);
 
 int main(){
 
-	//ListaOrd l;
+	printf("%d \n", USHRT_MAX);
+
+	ListaOrd l;
 	
 	Deposito d;
-	d=(6);
+	d=crearDeposito(6);
 
-	agregarReferencia(d, 1, 4);
+	agregarReferencia(d, 0, 1);
+	agregarReferencia(d, 0, 4);
 
-	agregarReferencia(d, 1, 5);
+	agregarReferencia(d, 1, 2);
+	agregarReferencia(d, 2, 1);
+
 
 	agregarReferencia(d, 2, 3);
+	agregarReferencia(d, 3, 2);
 
-	agregarReferencia(d, 3, 4);
-
-	agregarReferencia(d, 4, 2);
-
-	agregarReferencia(d, 5, 6);
-
-	agregarReferencia(d, 6, 5);
-
-	bool * articulos_considerados=new bool [7];
-
-	for(unsigned int i = 0; i<=6; i++)
-		articulos_considerados[i]=false;
-
-	gradosDeSeparacion(d, articulos_considerados);
+	agregarReferencia(d, 3, 1);
+	agregarReferencia(d, 1, 3);
 	
+	agregarReferencia(d, 4, 5);
+	agregarReferencia(d, 5, 4);
 
 	//imprimirDeposito(d);
+
+	//printf("Elemento en posicion 3: %d \n", elemento (d, 3) );
+
+	/*unsigned int * agrupamientos =new unsigned int [6];
+
+	for(unsigned int i = 0; i<6; i++)
+		agrupamientos[i]=0;
+	*/
+
+	//agrupamientos=colecciones(d);
+
+	/*for(unsigned int i = 0; i<6; i++)
+			printf("Las posiciones %d Los valores: %d \n", i, agrupamientos[i]);*/
+
+
+	/*nuevosAccesibles (d, 2, 2 ,agrupamientos);
+
+	printf("CERRO CAGON \n");
+
+	nuevosAccesibles (d, 3, 3,agrupamientos);
+
+
+	printf("CERRO CAGON \n");
+
+	nuevosAccesibles (d, 4, 4,agrupamientos);
+
+	printf("CERRO CAGON \n");
+
+	nuevosAccesibles (d, 5, 5,agrupamientos);*/
+
+
+	bool * articulos_considerados=new bool [6];
+
+	for(unsigned int i = 0; i<6; i++)
+		articulos_considerados[i]=false;
+	
+	articulos_considerados[3]=true;
+	articulos_considerados[1]=true;
+	articulos_considerados[2]=true;
+
+	//articulos_considerados[4]=true;
+	//articulos_considerados[0]=true;
+
+	printf ("Separacion %d \n", gradosDeSeparacion(d, articulos_considerados)  );
+
+
 	//l=referencias (d, 3);
 	//imprimirLista(l);
 	//imprimirLista(l);
@@ -57,14 +101,14 @@ int main(){
 	//printf("Cantidad de articulos %d \n", cantidadArticulos(d));
 
 
-        unsigned int * agrupamientos =new unsigned int [7];
+        /*unsigned int * agrupamientos =new unsigned int [7];
 
 	for(unsigned int i = 0; i<=6; i++)
 		agrupamientos[i]=i;
 	
 	for(unsigned int i = 0; i<=6; i++)
 			printf("Los valores: %d \n", agrupamientos[i]);
-	
+	*/
 
 
 
@@ -77,7 +121,7 @@ int main(){
 		agrupamientos[i]=0;*/
 	//nuevosAccesibles (d, 3, 7 ,agrupamientos);
 
-	//printf("BOLSO CAGON \n");
+
 
 
 	//nuevosAccesibles (d, 1, 88 ,agrupamientos);
@@ -112,8 +156,9 @@ int main(){
 	printf("IMPRIMIR PILAS \n\n\n");
 
 	imprimirPila(p);
-	
-	Deposito t;
+	*/
+
+	/*Deposito t;
 
 	t=transpuesto (d);
 	printf("VA MANYAR MIERDA \n\n\n");
@@ -121,9 +166,9 @@ int main(){
 
 	printf("AGORA EL OTRO CARA \n\n\n");
 	imprimirDeposito(d);
-	*/
+	
 
-	destruirDeposito (d);
+	destruirDeposito (d);*/
 
 	return 0;
 }
