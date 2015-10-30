@@ -1,0 +1,23 @@
+7
+2 FIN
+0 3 FIN
+1 FIN
+4 FIN
+3 5 FIN
+FIN
+FIN
+reiniciar
+7
+2 FIN
+0 3 FIN
+1 FIN
+4 FIN
+3 5 FIN
+FIN
+FIN
+grados s s s n n n n
+colecciones
+transpuesto
+dfs
+nuevos 1 0 65535 0 65535 1 1 2 3
+salir

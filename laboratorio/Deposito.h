@@ -16,9 +16,7 @@ struct AuxDeposito;
 typedef AuxDeposito * Deposito;
 
 Deposito crearDeposito (unsigned int cantidad_articulos);
-/*  Devuelve un depósito con 'cantidad_articulos' artículos, sin referencias. 
-    Para cada i, '0 <= i < cantidad_articulos' hay un artículo 'a' que cumple
-    'hash (a) == i'. */
+/*  Devuelve un depósito con 'cantidad_articulos' artículos, sin referencias. */
 
 void agregarReferencia (Deposito d, tipoT a1, tipoT a2);
 /*  Precondiciones:
@@ -28,8 +26,7 @@ void agregarReferencia (Deposito d, tipoT a1, tipoT a2);
 
 ListaOrd referencias (Deposito d, tipoT a);
 /*  Precondición: 0 <= 'hash (a)' < cantidad de artículos de 'd'.
-    Devuelve la lista ordenada de las referencias de 'a'.
-    La lista devuelta no debe compartir memoria con 'd'. */
+    Devuelve la lista ordenada de las referencias de 'a'. */
 
 tipoT elemento (Deposito d, unsigned int pos);
 /*  Precondición: 0 <= 'pos' < cantidad de artículos de 'd'.

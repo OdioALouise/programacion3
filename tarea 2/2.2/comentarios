@@ -1,0 +1,51 @@
+Para la segunda formalización del problema, si vamos a mandar una tupla fija, necesitamos que los valores estén entre 0 y m, pues precisamos del 0 para indicar que la charla no tiene sala asignada, y el resto de los índices se corresponde con las salas numeradas de la 1 a la m.
+
+En cuanto a los predicados de poda funcionan, pero debemos emplearlos cuando el valor de la componente a la cual vamos a aplicar la poda tenga el valor 1, es decir no aplicar estos predicados cuando la componente tenga el valor 0 (pues sino en estos casos estaríamos podando soluciones del espacio de soluciones), cuando las componentes tengan el valor 0 hay que dejarlo correr libremente al aloritmo por el espacio de soluciones.
+Para creerme esto vichen el caso siguiente:
+	"Caso en donde ninguna charla puede ser asignada a ninguna sala"
+Si aplicamos de entrada alli la poda:
+	"Una charla no es compatible con la disponibilidad horaria de ninguna sala (entonces poda)"
+Estaríamos podando alguna solución que tenga a esta componente con valor 0.
+Es decir estas soluciones en principio podrían ser solución: <0,0> <0,1> <0,2><0,3> y la primer componente es culo acá, no influye y se estaría recortando
+De hecho <0,0> es la solución al problema.
+
+En cuanto a la parte b) del problema, el de solución de ejemplos, creo que con el ejemplo que les paso en el documento adjunto ya tenemos bastante cubierto el espacio de soluciones y abarcadas casi todas las restricciones (solamente no fue abarcado el segundo predicado de poda).
+Por lo que Alejandro, si querés podes hacer algún caso partícular sencillo del caso general y listo no complicarte con recorridos largos.
+
+Estaría bueno hacer un recorrido que abarque ese segundo predicado de poda.
+
+Ejemplo
+
+Sala 1{ inicio: 15 fin: 17}
+Sala 2{ inicio: 19 fin: 20}
+
+Charla 1 {asistentes: 11 inicio: 15 fin: 16 }
+Charla 2 {asistentes: 12 inicio: 16 fin: 17 }
+Charla 3 {asistentes: 5 inicio: 15 fin: 16 }
+Charla 4 {asistentes: 11 inicio: 9 fin: 10 }
+
+Cuando en la recorrida se pase por la tupla <1,1,-1,-1>
+se deja hacer el recorrido por el espacio <1,1,0,-1>
+pero cuando volvemos a <1,1,-1,-1> y quieramos pasar a <1,1,1,-1>  ahí podamos porque la Charla 3 tiene horarios compatible con la Sala 1 y no es compatible con los horarios de la Charla 1, pero además de todas las charlas esta sería la que menos asistentes aporte, además no es compatible con los horarios de la Sala 2 entonces viola todas las restricciones entonces podamos en <1,1,-1,-1>entonces no hacemos recorrida por <1,1,1,-1> ni <1,1,2,-1> .
+
+Otra cosa importante, no se como habiamos hecho la función objetivo de la segunda formalización(cuadernola de Ale! ja), pero cuando contemos la cantidad de asistentes debemos meter un delta kronecker cosa de no contar los asistentes de las charlas que no tengan asignadas salas (recuerden que tenemos tupla fija para este caso y puede ocurrir eso)
+
+
+¿Qué queda?
+Contemplar el caso arriba mencionado.
+Revisar recorridos ver si algo explota.
+Pasar la formalización segunda (contemplar la correctitud de la función objetivo).
+
+
+¿Que adjunto?
+Parte4SegundaFormalizacion
+Modifiqué los predicados de poda para que se ajusten a lo que expresé en este mensaje, faltaría darle el aspecto formal al segundo predicado de poda que ahora está escrito en lenguaje natural.
+
+Parte4bEjemplos
+Con las tres recorridas abarcadas.
+
+
+Esta noche cuando vuelva de GuichonCity armo plantilla con lo que tengamos.
+
+
+
