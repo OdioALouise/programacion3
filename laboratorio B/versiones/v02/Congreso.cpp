@@ -1,28 +1,33 @@
 #include "Congreso.h"
 #include <stdio.h>
 
-//void backtracking(charla* charlas, int n, sala* salas, int m, int *solucion, int i, int *tupla);
-void backtracking(charla* charlas, int n, sala* salas, int m, int *solucion, int i, int *tupla, int *ultimacharla, int xi);
 
-void SelectionSort(charla* charlas, int* indices, int n);
+int *solucion;	
+int *tupla;
+int *indices;
+int *ultimacharla;
 
-//bool verificaRest(int *tupla, int i, charla* charlas);
-bool verificaRest (int *t, int n, charla *charlas, sala *salas, int i, int *ultimacharla);
+charla *charlas_globales;
+sala *salas_globales;
 
-bool esSalaDisponible(charla* charlas, int i, sala* salas, int xi);
-bool esMejor(int *tupla, int *solucion, charla* charlas, int n);
-bool esSolucion(int *tupla, int i, int n);
-void copiar(int *tupla,int* solucion, int n);
 
-//bool predicado(int *tupla, int *solucion, int n);
-bool predicado(int *tupla, int *solucion, int *ultimacharla, charla *charlas, sala *salas, int n, int m, int i);
+void backtracking(int n, int m, int i, int xi);
 
-bool compatibles (int idCharla1, int idCharla2, charla *charlas);
-bool disponible (int idCharla, int idSala, charla *charlas, sala *salas);
+bool disponible (int chini, int chfin, int sini, int sfin);
+bool compatibles (int chiini, int chifin, int chjini, int chjfin);
+
+bool verificaRest(int n, int i);
+bool esSalaDisponible(int i, int xi);
+bool esMejor(int n);
+bool esSolucion(int i, int n);
+void copiar(int n);
+
+bool predicado(int tn, int tn1, int sn);
+
+void SelectionSort(charla *charlas, int *indice, int n);
 
 int* max_asistentes_m (charla* charlas, int n, sala* salas, int m)
 {
-
 
 	//Arreglos para trabajar
 	/**
@@ -40,18 +45,19 @@ int* max_asistentes_m (charla* charlas, int n, sala* salas, int m)
 	ultimacharla arreglo que mantiene la ultima charla asignada a una sala
 	*/
 
-	int *solucion = new int[n+1];	
-	int *tupla = new int[n+2];
-	int *indices = new int[n];
-	int *ultimacharla= new int[m];
+	solucion = new int[n+1];	
+	tupla = new int[n+2];
+	indices = new int[n];
+	ultimacharla= new int[m];
 
 
+	//Inicializacion de valores 
 	tupla[n+1]=0;
 
 	for(int i=0; i < n; i++)
 	{
-		solucion[i]=-2;
-		tupla[i]=-2;
+		solucion[i]=-1;
+		tupla[i]=-1;
 		tupla[n+1]+=charlas[i].asistentes;
 		indices[i]=i;
 	}
@@ -65,10 +71,18 @@ int* max_asistentes_m (charla* charlas, int n, sala* salas, int m)
 	solucion[n]=0;
 	tupla[n]=0;
 
+
+
 	//Ordenamiento de charlas
 	SelectionSort(charlas, indices, n);
 
-	backtracking(charlas, n, salas, m, solucion, 0, tupla, ultimacharla, -1);
+
+	charlas_globales=charlas;
+	salas_globales=salas;
+
+	//comienzo de backtracking
+	backtracking(n, m, 0, -1);
+
 
 	//Reordenamos charlas y solucion
 
@@ -94,11 +108,12 @@ int* max_asistentes_m (charla* charlas, int n, sala* salas, int m)
 	}
 
 
-
 	return solucion;
 }
 
-void SelectionSort(charla* charlas, int* indices, int n){
+
+
+void SelectionSort(charla *charlas, int *indices, int n){
 	int i, j, posmin, tmp;
 	charla charla_temporal;
 	for(i=0; i< n-1; i++){
@@ -116,139 +131,115 @@ void SelectionSort(charla* charlas, int* indices, int n){
 	}
 }
 
-
 /*
-//Implementacion de la tecnica backtracking
+Implementacion de la tecnica backtracking
 
 charlas arreglo de charlas de tamanio n
 salas arreglo de salas de tamanio m
 
 tupla es la tupla generada por la tecnica al recorrer el arbol de soluciones
 solucion tupla solucion del problema
+ultimacharla arreglo que mantiene la ultima charla asignada a una sala
 
 posicion i a partir de la cual asignar una sala a una charla
 en la tupla generada al recorrer el arbol de soluciones
 
+xi ultimo valor de sala asignada para la charla i
+
 */
-void backtracking(charla* charlas, int n, sala* salas, int m, int *solucion, int i, int *tupla, int *ultimacharla, int xi)
-//void backtracking(charla* charlas, int n, sala* salas, int m, int *solucion, int i, int *tupla)
+void backtracking(int n, int m, int i, int xi)
 {
-	
-		
-//	if(predicado(tupla, solucion, n)){
-	if( predicado( tupla, solucion, ultimacharla, charlas, salas,  n, m, i) ){
-		//if(verificaRest(tupla, i, charlas)){
-		if ( verificaRest (tupla, n, charlas, salas, i, ultimacharla) ){
+
+	if(predicado(tupla[n], tupla[n+1], solucion[n])){
+		if(verificaRest(n, i-1)){
+
 			int *aux= new int;
 			*aux=ultimacharla[xi];
 			ultimacharla[xi] = i-1;
 
+			if( esMejor(n)){
+				
+				copiar(n);
+			}
+			
+			
+			for(int j=i; j<n; j++) {
+				for(int xi=0; xi < m; xi++)
+				{
+					tupla[j]=xi;
 
-				if( esMejor(tupla, solucion, charlas, n)){
-					copiar(tupla,solucion, n);
+					tupla[n]+=charlas_globales[j].asistentes;
+					tupla[n+1]-=charlas_globales[j].asistentes;
+
+					backtracking(n, m, j + 1, xi);
+					
+					tupla[n]-=charlas_globales[j].asistentes;
+					tupla[n+1]+=charlas_globales[j].asistentes;
+
+					tupla[j]=-1;
 				}
-
-				for(int c=-1; c < m; c++)
-					{
-						tupla[i]=c;
-
-						tupla[n]+=charlas[i].asistentes;
-						tupla[n+1]-=charlas[i].asistentes;
-									
-						backtracking(charlas, n, salas, m, solucion, i + 1, tupla, ultimacharla, c);
-						
-						tupla[n]-=charlas[i].asistentes;
-						tupla[n+1]+=charlas[i].asistentes;
-
-						tupla[i]=-2;
-					}
+			}
 			ultimacharla[xi] = *aux;
 			delete aux;
-
 		}
 	}
 }
 
+/*
+El predicado compara la cantidad de asistentes de la solucion actual con la cantidad de asistentes de las charlas de la tupla que tienen sala asignada mas los asistentes de aquellas charlas que aun no han sido procesadas ( [i...n-1] ) y que o bien son compatibles con las charlas que tiene sala asignada o bien tienen una sala disponible (que no tiene charla asignada aún).
 
-bool predicado(int *tupla, int *solucion, int *ultimacharla, charla *charlas, sala *salas, int n, int m, int i) {
+Si el resultado de la segunda expresión es mayor a la cantidad de asistentes de la solucion actual, entonces es posible que haya una mejor solucion, se sigue el recorrido.
+Si el resultado de la segunda expresión es menor a la cantidad de asistentes de la solución actual, entonces no es posible que haya una mejor solucion se realiza poda.
+*/
 
-	int restoAsistentes= 0;
-	bool esCompatible=false;
-
-	for(int k=i; k<n; k++){
-		esCompatible=false;
-		for(int j=0; j<m && !esCompatible; j++){
-
-			if( ( ultimacharla[j] == -1 && disponible (k, j, charlas, salas) ) || ( ultimacharla[j] != -1 && compatibles (k, ultimacharla[j], charlas))){
-				restoAsistentes+=charlas[k].asistentes;
-				esCompatible=true;
-			}
-
-		}
-	}
-
-	if(tupla[n] + restoAsistentes <= solucion[n]){
+bool predicado(int tn, int tn1, int sn)
+{
+	if(tn + tn1 <= sn)
 		return false;
-		}
-
 	return true;
-
 }
-
 
 
 //Se debe evaluar la compatibilidad de la charla actual 
-//con las charlas anteriores que tienen la misma sala asignada
-bool verificaRest (int *t, int n, charla *charlas, sala *salas, int i, int *ultimacharla) //Verifica si las restricciones se cumplen
+//con la charla más próxima que tiene la misma sala asignada
+bool verificaRest (int n, int i) //Verifica si las restricciones se cumplen
 { 
 	bool boolean = true;
 
-	i--;
-
-	//Verifico si hay disponibilidad para la charla i
-	if (i!=-1 && t[i]!=-1 && !disponible(i,t[i],charlas,salas)){
+	//Verifico si hay disponibilidad y compatibilidad para la charla i
+	if (i!=-1 && tupla[i]!=-1 && ((!disponible(charlas_globales[i].inicio, charlas_globales[i].fin, salas_globales[tupla[i]].inicio,salas_globales[tupla[i]].fin)) \
+||( ultimacharla[tupla[i]]!=-1 && !compatibles( charlas_globales[ultimacharla[tupla[i]]].inicio, charlas_globales[ultimacharla[tupla[i]]].fin, \
+charlas_globales[i].inicio,charlas_globales[i].fin) ) ))
+	{
 		boolean = false;
 	}
-	//Verifico compatibilidad
-	if (i!=-1 && t[i]!=-1 && ultimacharla[t[i]]!=-1 && !compatibles(ultimacharla[t[i]],i,charlas)){
-			boolean = false;
-		}
-
 	return boolean;
 }
 
 
-bool compatibles (int idCharla1, int idCharla2, charla *charlas) //Compatibilidad charla-charla
+
+bool compatibles (int chiini, int chifin, int chjini, int chjfin)
 {
-	if ((charlas[idCharla1].inicio>=charlas[idCharla2].fin) || (charlas[idCharla1].fin<=charlas[idCharla2].inicio))
+	if ((chiini>=chjfin) || (chifin<=chjini))
 		return true;
-	else
-		return false;
+	return false;
 }
 
-bool disponible (int idCharla, int idSala, charla *charlas, sala *salas) //Disponibilidad charla-sala
+
+
+ //Disponibilidad charla-sala
+bool disponible (int chini, int chfin, int sini, int sfin)
 {
-	if ((charlas[idCharla].inicio>=salas[idSala].inicio) && (charlas[idCharla].fin<=salas[idSala].fin))
+	if ((chini>=sini) && (chfin<=sfin))
 		return true;
-	else
-		return false;
+	return false;
 }
 
-
-
-//Verificar si la charla cae dentro de la disponibilidad horaria
-//de la sala
-bool esSalaDisponible(charla* charlas, int i, sala* salas, int xi){
-	if( !  ( (charlas[i].fin <= salas[xi].fin) && (charlas[i].inicio >= salas[xi].inicio) ) ){
-		return false;
-	}
-	return true;
-}
 
 
 //Determina si la cantidad de asistentes de la tupla es mayor
 //que la cantidad de asistentes de la tupla solucion
-bool esMejor(int *tupla, int *solucion, charla* charlas, int n){
+bool esMejor(int n){
 	if(tupla[n]<=solucion[n])
 		return false;	
 	return true;
@@ -258,15 +249,13 @@ bool esSolucion(int *tupla, int i, int n){
 
 	if(i==n)
 		return true;
-
 	return false;
 }
 
 
 //Se actualiza la tupla solucion
-void copiar(int *tupla,int* solucion, int n){
+void copiar(int n){
 	for(int j=0; j<=n; j++){
 		solucion[j]=tupla[j];
 	}
 }
-
